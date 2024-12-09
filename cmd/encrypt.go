@@ -36,7 +36,7 @@ var encryptCmd = &cobra.Command{
 		encrypted := internal.Encrypt(data, shift)
 
 		if outputPath != "" {
-			err = internal.WriteFile(outputPath, encrypted)
+			err = internal.WriteFile(outputPath, encrypted, "encrypted.txt")
 			if err != nil {
 				fmt.Printf("Failed to write output file: %v\n", err)
 				os.Exit(1)

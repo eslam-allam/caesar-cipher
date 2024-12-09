@@ -57,14 +57,14 @@ func ReadFile(path string) (string, error) {
 	return string(data), nil
 }
 
-func WriteFile(filePath string, data string) error {
+func WriteFile(filePath, data, fallbackName string) error {
 	exists, isDir, err := FileExists(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to check if output file exists: %w", err)
 	}
 	if exists {
 		if isDir {
-			return WriteFile(path.Join(filePath, "caesar-cipher.txt"), data)
+			return WriteFile(path.Join(filePath, fallbackName), data, fallbackName)
 		}
 		return fmt.Errorf("output file already exists: %s", filePath)
 	}
