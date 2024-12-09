@@ -33,12 +33,17 @@ var encryptCmd = &cobra.Command{
 			fmt.Printf("Failed to read data: %v\n", err)
 			os.Exit(1)
 		}
-        encrypted := internal.Encrypt(data, shift)
-        decrypted := internal.Decrypt(encrypted, shift)
+		encrypted := internal.Encrypt(data, shift)
 
-        fmt.Printf("Original: %s\n", data)
-        fmt.Printf("Encrypted: %s\n", encrypted)
-        fmt.Printf("Decrypted: %s\n", decrypted)
+		if outputPath != "" {
+			err = internal.WriteFile(outputPath, encrypted)
+			if err != nil {
+				fmt.Printf("Failed to write output file: %v\n", err)
+				os.Exit(1)
+			}
+			os.Exit(0)
+		}
+		fmt.Println(encrypted)
 
 		os.Exit(0)
 	},
