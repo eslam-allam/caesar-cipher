@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 )
 
 var ErrStdEmpty = errors.New("std empty")
@@ -56,15 +57,20 @@ func ReadFile(path string) (string, error) {
 	return string(data), nil
 }
 
-func WriteFile(path string, data string) error {
-    exists, isDir,  err := FileExists(path)
-    if err != nil {
-        return fmt.Errorf("failed to check if output file exists: %w", err)
-    }
-    if exists {
-        if isDir {
-            return WriteFile(paths, data string)
-
-        }
-    }
+func WriteFile(filePath string, data string) error {
+	exists, isDir, err := FileExists(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to check if output file exists: %w", err)
+	}
+	if exists {
+		if isDir {
+			return WriteFile(path.Join(filePath, "caesar-cipher.txt"), data)
+		}
+		return fmt.Errorf("output file already exists: %s", filePath)
+	}
+	err = os.MkdirAll(path.Dir(filePath), 0444)
+	if err != nil {
+		return fmt.Errorf("failed to create output directory: %w", err)
+	}
+	return os.WriteFile(filePath, []byte(data), 0644)
 }
