@@ -27,6 +27,9 @@ func GetStdin() (string, error) {
 func FileExists(path string) (exists bool, isDir bool, err error) {
 	fi, err := os.Stat(path)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return false, false, nil
+		}
 		return false, false, fmt.Errorf("failed to stat file: %w", err)
 	}
 	if fi.IsDir() {
